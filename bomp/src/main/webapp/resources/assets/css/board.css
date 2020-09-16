@@ -1,0 +1,92 @@
+@import url(reset.css);
+@import url(header.css);
+@import url(footer.css);
+@import url(main.css);
+
+.wrapper .postWirtingBtn {
+    margin: 1em auto;
+    width: 100%;
+}
+
+/* postTool */
+
+.postTool {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    -moz-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -moz-justify-content: space-between;
+    -webkit-justify-content: space-between;
+    -ms-justify-content: space-between;
+    justify-content: space-between;
+    -moz-align-items: -moz-stretch;
+    -webkit-align-items: -webkit-stretch;
+    -ms-align-items: -ms-stretch;
+    align-items: stretch;
+}
+
+.postTool .search {
+    width: 180px
+}
+
+.postTool .search > input {
+    display: inline;
+    font-size: 0.9em;
+}
+
+.postTool .search > button {
+    display: inline;
+    box-shadow: none;
+    padding: 0;
+}
+
+.postTool .array > select {
+    font-size: 0.9em;
+}
+
+.comentEA {
+    font-size: 1.2em;
+    margin: 10px;
+}  
+
+@media all and (min-width:768px) {
+    .post {
+        width: 730px;
+        margin: 0 auto;
+    }
+    .function_board {
+        width: 730px;
+        margin: 0 auto;
+    }
+}
+
+.searchInput {
+    display: inline;
+}
+
+.searchBtn {
+    display: inline;
+}
+
+@media all and (min-width:768px) {
+    .discussion {
+        width: 730px;
+        margin: 0 auto;
+    }
+}
+
+.pagination {
+    text-align: center;
+}
+
+td {
+	font-size: 0.8em;
+}
+
+.tag {
+	color: #999;
+}

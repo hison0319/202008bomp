@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.CommentLikeMapper">
+<select id="getList" resultType="CommentLike">
+		<![CDATA[
+			SELECT * FROM tb7_comment_like where comment_like_id > 0	
+		]]>
+	</select>
+	
+	<select id="read" resultType="CommentLike">
+		select * from tb7_comment_like where comment_like_id = #{CommentLikeId}
+	</select>
+	
+	<select id="readMemberIdANDCommentId" resultType="CommentLike">
+		select * from tb7_comment_like where member_id=#{memberId} AND comment_id = #{commentId}
+	</select>
+	
+	<select id="getCountCommentIdWithMemberId" resultType="int">
+		select count(comment_like_id) from tb7_comment_like 
+		where member_id = #{memberId} AND comment_id = #{commentId}
+	</select>
+	
+	<insert id="insert">
+		insert into tb7_comment_like (member_id, comment_id)
+		values (#{memberId}, #{commentId})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="commentLikeId">
+		insert into tb7_comment_like (member_id, comment_id)
+		values (#{memberId}, #{commentId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb7_comment_like where comment_like_id = #{commentLikeId}
+	</delete>
+	
+	<update id="update">
+		update tb7_comment_like set member_id=#{memberId}, comment_id=#{commentId} 
+		where comment_like_id=#{commentLikeId}
+	</update>
+</mapper>

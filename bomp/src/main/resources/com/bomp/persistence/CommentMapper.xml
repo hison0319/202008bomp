@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.CommentMapper">
+	<select id="getList" resultType="Comment">
+		<![CDATA[
+			SELECT * FROM tb3_comment where comment_id > 0	
+		]]>
+	</select>
+	
+	<select id="getListLimitWithBoradIdPopular" resultType="Comment">
+		<![CDATA[
+			SELECT tb3_comment.comment_id, tb3_comment.board_id, tb3_comment.comment_text, 
+			tb3_comment.member_id, tb3_comment.u_date, tb3_comment.like_cnt, tb3_comment.recomment_cnt, 
+			tb1_member.member_nick
+			FROM tb3_comment join tb1_member on tb3_comment.member_id = tb1_member.member_id
+			where board_id = #{boardId} 
+			order by like_cnt desc limit #{first}, #{amount}	
+		]]>
+	</select>
+	
+	<select id="getListLimitWithBoradIdUDate" resultType="Comment">
+		<![CDATA[
+			SELECT tb3_comment.comment_id, tb3_comment.board_id, tb3_comment.comment_text, 
+			tb3_comment.member_id, tb3_comment.u_date, tb3_comment.like_cnt, tb3_comment.recomment_cnt, 
+			tb1_member.member_nick
+			FROM tb3_comment join tb1_member on tb3_comment.member_id = tb1_member.member_id
+			where board_id = #{boardId} 
+			order by u_date desc limit #{first}, #{amount}	
+		]]>
+	</select>
+	
+	<select id="getListBoardBest" resultType="Comment">
+		<![CDATA[
+			SELECT tb3_comment.comment_id, tb3_comment.board_id, tb3_comment.comment_text, 
+			tb3_comment.member_id, tb3_comment.u_date, tb3_comment.like_cnt, tb3_comment.recomment_cnt, 
+			tb1_member.member_nick
+			FROM tb3_comment join tb1_member on tb3_comment.member_id = tb1_member.member_id
+			where board_id = #{boardId}
+			order by like_cnt desc, u_date desc limit 3	
+		]]>
+	</select>
+	
+	<select id="read" resultType="Comment">
+		select * from tb3_comment where comment_id = #{commentId}
+	</select>
+	
+	<select id="getCommentIdByRecommentId" resultType="int">
+		select tb3_comment.comment_id
+		from tb3_comment join tb4_recomment
+		on tb3_comment.comment_id = tb4_recomment.comment_id
+		where tb4_recomment.recomment_id = #{recommentId}
+	</select>
+	
+	<select id="confirmBestComment" resultType="CoAndBo">
+		<![CDATA[
+			SELECT 
+			tb2_board.board_id, tb2_board.best_comment_like_cnt, 
+			tb3_comment.comment_id, tb3_comment.like_cnt 
+			FROM 
+			tb2_board join tb3_comment 
+			on tb2_board.board_id = tb3_comment.board_id 
+			where tb3_comment.comment_id=#{commentId} 
+			order by tb3_comment.like_cnt desc limit 1
+		]]>
+	</select>
+	
+	<insert id="insert">
+		insert into tb3_comment (board_id, comment_text, member_id)
+		values (#{boardId}, #{commentText}, #{memberId})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="commentId">
+		insert into tb3_comment (board_id, comment_text, member_id)
+		values (#{boardId}, #{commentText}, #{memberId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb3_comment where comment_id = #{commentId}
+	</delete>
+	
+	<update id="update">
+		update tb3_comment set board_id=#{boardId}, comment_text=#{commentText}, 
+		member_id=#{memberId}, u_date=now() where comment_id=#{commentId}
+	</update>
+	
+	<update id="updateRecommentCntPlus">
+		<![CDATA[
+			update tb3_comment set recomment_cnt = recomment_cnt + 1 
+			where comment_id = #{commentId}
+		]]>
+	</update>
+
+	<update id="updateRecommentCntMinus">
+		<![CDATA[
+			update tb3_comment set recomment_cnt = recomment_cnt - 1 
+			where comment_id = #{commentId}
+		]]>
+	</update>
+	
+	<update id="updateLikeCntPlus">
+		<![CDATA[
+			update tb3_comment set like_cnt = like_cnt + 1 
+			where comment_id = #{commentId}
+		]]>
+	</update>
+
+	<update id="updateLikeCntMinus">
+		<![CDATA[
+			update tb3_comment set like_cnt = like_cnt - 1 
+			where comment_id = #{commentId}
+		]]>
+	</update>
+</mapper>

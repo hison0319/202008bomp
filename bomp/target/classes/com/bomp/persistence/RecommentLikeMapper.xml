@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.RecommentLikeMapper">
+<select id="getList" resultType="RecommentLike">
+		<![CDATA[
+			SELECT * FROM tb8_recomment_like where recomment_like_id > 0	
+		]]>
+	</select>
+	
+	<select id="read" resultType="RecommentLike">
+		select * from tb8_recomment_like where recomment_like_id = #{RecommentLikeId}
+	</select>
+	
+	<select id="readMemberIdANDRecommentId" resultType="RecommentLike">
+		select * from tb8_recomment_like where member_id=#{memberId} AND recomment_id = #{recommentId}
+	</select>
+	
+	<select id="getCountRecommentIdWithMemberId" resultType="int">
+		select count(recomment_like_id) from tb8_recomment_like 
+		where member_id = #{memberId} AND recomment_id = #{recommentId}
+	</select>
+	
+	<insert id="insert">
+		insert into tb8_recomment_like (member_id, recomment_id)
+		values (#{memberId}, #{recommentId})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="recommentLikeId">
+		insert into tb8_recomment_like (member_id, recomment_id)
+		values (#{memberId}, #{recommentId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb8_recomment_like where recomment_like_id = #{recommentLikeId}
+	</delete>
+	
+	<update id="update">
+		update tb8_recomment_like set member_id=#{memberId}, recomment_id=#{recommentId} 
+		where recomment_like_id=#{recommentLikeId}
+	</update>
+</mapper>

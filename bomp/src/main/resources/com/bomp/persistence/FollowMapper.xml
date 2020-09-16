@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.FollowMapper">
+<select id="getList" resultType="Follow">
+		<![CDATA[
+			SELECT * FROM tb5_follow where follow_id > 0	
+		]]>
+	</select>
+	
+	<select id="read" resultType="Follow">
+		select * from tb5_follow where follow_id = #{followId}
+	</select>
+	
+	<insert id="insert">
+		insert into tb5_follow (member_id, following_id)
+		values (#{memberId}, #{followingId})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="followId">
+		insert into tb5_follow (member_id, following_id)
+		values ( #{memberId}, #{followingId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb5_follow where follow_id = #{followId}
+	</delete>
+	
+	<update id="update">
+		update tb5_follow set member_id=#{memberId}, following_id=#{followingId} 
+		where follow_id=#{followId}
+	</update>
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.AlertMapper">
+	<select id="getListNoneChecked" resultType="Alert">
+		<![CDATA[
+			SELECT tb11_alert.*, tb1_member.member_nick
+			FROM tb11_alert
+			join tb1_member on
+			tb11_alert.member_id = tb1_member.member_id
+			where tb11_alert.alert_member_id = #{memberId}
+			and checked = 0
+			order by u_date desc
+			limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getListChecked" resultType="Alert">
+		<![CDATA[
+			SELECT tb11_alert.*, tb1_member.member_nick
+			FROM tb11_alert
+			join tb1_member on
+			tb11_alert.member_id = tb1_member.member_id
+			where tb11_alert.alert_member_id = #{memberId}
+			and checked = 1
+			order by u_date desc
+			limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="read" resultType="Alert">
+		select * from tb11_alert where alert_id = #{alertId}
+	</select>
+	
+	<insert id="insert">
+		insert into tb11_alert (member_id, alert_member_id, alert_comment, kind)
+		values (#{memberId}, #{alertMemberId}, #{alertComment}, #{kind})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb11_alert where alert_id = #{alertId}
+	</delete>
+	
+	<update id="updateChecked">
+		update tb11_alert set checked=1 where alert_id=#{alertId}
+	</update>
+</mapper>

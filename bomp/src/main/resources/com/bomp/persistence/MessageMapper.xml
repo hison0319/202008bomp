@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.MessageMapper">
+	<select id="getList" resultType="BoardLike">
+		<![CDATA[
+			select tb13_message.*, tb1_member.member_nick
+			from tb13_message join tb1_member
+			on tb13_message.from_member_id = tb1_member.member_id
+			where tb13_message.to_member_id = #{memberId}
+			order by tb13_message.reg_date desc
+			limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="read" resultType="Message">
+		select tb13_message.*, tb1_member.member_nick
+		from tb13_message join tb1_member
+		on tb13_message.to_member_id = tb1_member.member_id
+		where tb13_message.message_id = #{messageId}
+	</select>
+	
+	<insert id="insertSelectKey" keyProperty="messageId">
+		insert into tb13_message (from_member_id, to_member_id, message_content)
+		values (#{fromMemberId}, #{toMemberId}, #{messageContent})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb13_message where message_id = #{messageId}
+	</delete>
+</mapper>

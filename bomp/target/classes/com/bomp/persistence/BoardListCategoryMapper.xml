@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.BoardListCategoryMapper">
+	
+	<select id="getListCategoryPopular"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.*, tb1_member.member_nick
+			from
+			tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+			where tb2_board.category_name = #{categoryName}
+			order by tb2_board.best_comment_like_cnt desc 
+			limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getListCategoryUDate"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.*, tb1_member.member_nick
+			from
+			tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+			where tb2_board.category_name = #{categoryName}
+			order by tb2_board.u_date desc 
+			limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getListCategoryTagPopular"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.*, tb1_member.member_nick
+			from
+			tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+			join tb10_board_tag
+			on tb2_board.board_id = tb10_board_tag.board_id
+			join tb9_member_tag
+			on tb10_board_tag.tag1 = tb9_member_tag.tag or tb10_board_tag.tag2 = tb9_member_tag.tag or tb10_board_tag.tag3 = tb9_member_tag.tag 
+			or tb10_board_tag.tag4 = tb9_member_tag.tag or tb10_board_tag.tag5 = tb9_member_tag.tag
+			where tb9_member_tag.member_id = #{memberId} and tb2_board.category_name = #{categoryName}
+			group by tb2_board.board_id
+			order by tb2_board.best_comment_like_cnt desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getListCategoryNoneTagPopular"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.*, tb1_member.member_nick
+			from
+			tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+			where tb2_board.board_id not in (
+			select
+			tb2_board.board_id
+			from
+			tb2_board join tb10_board_tag
+			on tb2_board.board_id = tb10_board_tag.board_id
+			join tb9_member_tag
+			on tb10_board_tag.tag1 = tb9_member_tag.tag or tb10_board_tag.tag2 = tb9_member_tag.tag or tb10_board_tag.tag3 = tb9_member_tag.tag 
+			or tb10_board_tag.tag4 = tb9_member_tag.tag or tb10_board_tag.tag5 = tb9_member_tag.tag
+			where tb9_member_tag.member_id = #{memberId}
+			group by tb2_board.board_id
+			)
+			and tb2_board.category_name = #{categoryName}
+			order by tb2_board.best_comment_like_cnt desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getListCategoryTagUDate"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.*, tb1_member.member_nick,
+			tb10_board_tag.*, tb9_member_tag.*
+			from
+			tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+			join tb10_board_tag
+			on tb2_board.board_id = tb10_board_tag.board_id
+			join tb9_member_tag
+			on tb10_board_tag.tag1 = tb9_member_tag.tag or tb10_board_tag.tag2 = tb9_member_tag.tag or tb10_board_tag.tag3 = tb9_member_tag.tag 
+			or tb10_board_tag.tag4 = tb9_member_tag.tag or tb10_board_tag.tag5 = tb9_member_tag.tag
+			where tb9_member_tag.member_id = #{memberId} and tb2_board.category_name = #{categoryName}
+			group by tb2_board.board_id
+			order by tb2_board.u_date desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getListCategoryNoneTagUDate"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.*, tb1_member.member_nick
+			from
+			tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+			where tb2_board.board_id not in (
+			select
+			tb2_board.board_id
+			from
+			tb2_board join tb10_board_tag
+			on tb2_board.board_id = tb10_board_tag.board_id
+			join tb9_member_tag
+			on tb10_board_tag.tag1 = tb9_member_tag.tag or tb10_board_tag.tag2 = tb9_member_tag.tag or tb10_board_tag.tag3 = tb9_member_tag.tag 
+			or tb10_board_tag.tag4 = tb9_member_tag.tag or tb10_board_tag.tag5 = tb9_member_tag.tag
+			where tb9_member_tag.member_id = #{memberId}
+			group by tb2_board.board_id
+			)
+			and tb2_board.category_name = #{categoryName}
+			order by tb2_board.u_date desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getCountCategoryTag" resultType="int">
+		<![CDATA[
+			select
+			COUNT(distinct tb2_board.board_id)
+			from
+			tb2_board join tb10_board_tag
+			on tb2_board.board_id = tb10_board_tag.board_id
+			join tb9_member_tag
+			on tb10_board_tag.tag1 = tb9_member_tag.tag or tb10_board_tag.tag2 = tb9_member_tag.tag or tb10_board_tag.tag3 = tb9_member_tag.tag 
+			or tb10_board_tag.tag4 = tb9_member_tag.tag or tb10_board_tag.tag5 = tb9_member_tag.tag
+			where tb9_member_tag.member_id = #{memberId} and tb2_board.category_name = #{categoryName}
+		]]>
+	</select>
+
+</mapper>

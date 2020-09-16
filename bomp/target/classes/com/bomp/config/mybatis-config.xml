@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <settings>
+      <setting name="mapUnderscoreToCamelCase" value="true"/>
+      <setting name="useGeneratedKeys" value="true"/>
+   </settings>
+   <typeAliases>
+		<typeAlias type="com.bomp.domain.BoardVO" alias="Board"/>
+		<typeAlias type="com.bomp.domain.BoardLikeVO" alias="BoardLike"/>
+		<typeAlias type="com.bomp.domain.BoardMarkVO" alias="BoardMark"/>
+		<typeAlias type="com.bomp.domain.BoardTagVO" alias="BoardTag"/>
+		<typeAlias type="com.bomp.domain.CommentLikeVO" alias="CommentLike"/>
+		<typeAlias type="com.bomp.domain.RecommentLikeVO" alias="RecommentLike"/>
+		<typeAlias type="com.bomp.domain.CommentVO" alias="Comment"/>
+		<typeAlias type="com.bomp.domain.FollowVO" alias="Follow"/>
+		<typeAlias type="com.bomp.domain.MemberTagVO" alias="MemberTag"/>
+		<typeAlias type="com.bomp.domain.MemberVO" alias="Member"/>
+		<typeAlias type="com.bomp.domain.RecommentVO" alias="Recomment"/>
+		<typeAlias type="com.bomp.domain.AlertVO" alias="Alert"/>
+		<typeAlias type="com.bomp.domain.MessageVO" alias="Message"/>
+		<typeAlias type="com.bomp.domain.CommentAndBoardDto" alias="CoAndBo"/>
+   </typeAliases>
+</configuration>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.RecommentMapper">
+	<select id="getList" resultType="Recomment">
+		<![CDATA[
+			SELECT * FROM tb4_recomment where recomment_id > 0	
+		]]>
+	</select>
+	
+	<select id="getListLimitWithCommentIdJoinMemberNick" resultType="Recomment">
+		<![CDATA[
+			SELECT tb4_recomment.recomment_id, tb4_recomment.comment_id, 
+			tb4_recomment.recomment_text, tb4_recomment.member_id, 
+			tb4_recomment.u_date, tb4_recomment.like_cnt, tb1_member.member_nick
+			FROM tb4_recomment join tb1_member on tb4_recomment.member_id = tb1_member.member_id
+			where comment_id = #{commentId} 
+			order by u_date desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="read" resultType="Recomment">
+		select * from tb4_recomment where recomment_id = #{recommentId}
+	</select>
+	
+	<insert id="insert">
+		insert into tb4_recomment (comment_id, recomment_text, member_id)
+		values (#{commentId}, #{recommentText}, #{memberId})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="recommentId">
+		insert into tb4_recomment (comment_id, recomment_text, member_id)
+		values (#{commentId}, #{recommentText}, #{memberId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb4_recomment where recomment_id = #{recommentId}
+	</delete>
+	
+	<update id="update">
+		update tb4_recomment set comment_id=#{commentId}, recomment_text=#{recommentText}, 
+		member_id=#{memberId}, u_date=now() where recomment_id=#{recommentId}
+	</update>
+	
+	<update id="updateLikeCntPlus">
+		<![CDATA[
+			update tb4_recomment set like_cnt = like_cnt + 1 
+			where recomment_id = #{recommentId}
+		]]>
+	</update>
+
+	<update id="updateLikeCntMinus">
+		<![CDATA[
+			update tb4_recomment set like_cnt = like_cnt - 1 
+			where recomment_id = #{recommentId}
+		]]>
+	</update>
+</mapper>

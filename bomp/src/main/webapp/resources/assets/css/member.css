@@ -1,0 +1,24 @@
+@import url(reset.css);
+@import url(header.css);
+@import url(footer.css);
+@import url(main.css);
+
+
+@media all and (min-width:768px) {
+    .member_info {
+        width: 730px;
+        margin: 0 auto;
+    }
+    .activity {
+        width: 730px;
+        margin: 0 auto;
+    }
+    .follower {
+        width: 730px;
+        margin: 0 auto;
+    }
+    .following {
+        width: 730px;
+        margin: 0 auto;
+    }
+}

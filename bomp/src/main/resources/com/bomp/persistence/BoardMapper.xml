@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.BoardMapper">
+
+	<select id="getList" resultType="Board">
+		<![CDATA[
+			SELECT * FROM tb2_board where board_id > 0	
+		]]>
+	</select>
+	
+	<select id="getListBestBoard" resultType="Board">
+		<![CDATA[
+			select tb2_board.*, tb1_member.member_nick
+			from tb2_board join tb1_member
+			on tb2_board.member_id = tb1_member.member_id
+            where tb2_board.category_name not in ('토론방')  
+			order by tb2_board.best_comment_like_cnt desc
+			limit 3;
+		]]>
+	</select>
+	
+	<select id="getListLimitWithMemberNick"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.board_id, tb2_board.category_name, tb2_board.title, 
+			tb2_board.member_id, tb2_board.content, tb2_board.img_address, tb2_board.reg_date, 
+			tb2_board.u_date, tb2_board.like_cnt, tb2_board.comment_cnt, tb2_board.img_alt, 
+			tb2_board.best_comment_like_cnt, 
+			tb1_member.member_nick
+			from
+			tb2_board join tb1_member on tb2_board.member_id = tb1_member.member_id
+			order by board_id desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select count(board_id) from tb2_board
+	</select>
+
+	<select id="read" resultType="Board">
+		select
+		tb2_board.board_id,
+		tb2_board.category_name, tb2_board.title,
+		tb2_board.member_id,
+		tb2_board.content, tb2_board.img_address, tb2_board.reg_date,
+		tb2_board.u_date, tb2_board.like_cnt, tb2_board.comment_cnt,
+		tb2_board.img_alt, tb2_board.best_comment_like_cnt, 
+		tb1_member.member_nick
+		from
+		tb2_board join tb1_member
+		on tb2_board.member_id =
+		tb1_member.member_id
+		where tb2_board.board_id =
+		#{boardId}
+	</select>
+	
+	<select id="readOnlyUDate" resultType="Board">
+		select u_date from tb2_board where board_id = #{boardId}
+	</select>
+	
+	<select id="getBoardIdByCommentId" resultType="int">
+		select tb2_board.board_id
+		from tb2_board join tb3_comment
+		on tb2_board.board_id = tb3_comment.board_id
+		where tb3_comment.comment_id = #{commentId}
+	</select>
+
+	<select id="getListLimitAndCategoryWithMemberNick"
+		resultType="Board">
+		<![CDATA[
+			select
+			tb2_board.board_id, tb2_board.category_name, tb2_board.title, 
+			tb2_board.member_id, tb2_board.content, tb2_board.img_address, tb2_board.reg_date, 
+			tb2_board.u_date, tb2_board.like_cnt, tb2_board.comment_cnt, tb2_board.img_alt, 
+			tb2_board.best_comment_like_cnt, 
+			tb1_member.member_nick
+			from
+			tb2_board join tb1_member on tb2_board.member_id = tb1_member.member_id
+			where category_name = #{categoryName}
+			order by board_id desc limit #{first}, #{amount}
+		]]>
+	</select>
+	
+	<select id="getCountWithCategory" resultType="int">
+		select count(board_id) from tb2_board where category_name = #{categoryName}
+	</select>
+
+	<insert id="insert">
+		insert into tb2_board (category_name, title,
+		member_id, content, img_address, u_date, img_alt)
+		values (#{categoryName},
+		#{title}, #{memberId}, #{content}, #{imgAddress}, now(), #{imgAlt})
+	</insert>
+
+	<insert id="insertSelectKey" keyProperty="boardId">
+		insert into tb2_board (category_name, title,
+		member_id, content, img_address, u_date, img_alt)
+		values (#{categoryName},
+		#{title}, #{memberId}, #{content}, #{imgAddress}, now(), #{imgAlt})
+	</insert>
+
+	<delete id="delete">
+		delete from tb2_board where board_id = #{boardId}
+	</delete>
+
+	<update id="update">
+		update tb2_board set category_name=#{categoryName},
+		title=#{title}, content=#{content}, img_address=#{imgAddress},
+		img_alt=#{imgAlt}, u_date=now() where
+		board_id=#{boardId}
+	</update>
+
+	<update id="updateCommentCntPlus">
+		<![CDATA[
+			update tb2_board set comment_cnt = comment_cnt + 1 
+			where board_id = #{boardId}
+		]]>
+	</update>
+
+	<update id="updateCommentCntMinus">
+		<![CDATA[
+			update tb2_board set comment_cnt = comment_cnt - 1 
+			where board_id = #{boardId}
+		]]>
+	</update>
+
+	<update id="updateLikeCntPlus">
+		<![CDATA[
+			update tb2_board set like_cnt = like_cnt + 1, u_date = #{uDate}
+			where board_id = #{boardId}
+		]]>
+	</update>
+
+	<update id="updateLikeCntMinus">
+		<![CDATA[
+			update tb2_board set like_cnt = like_cnt - 1, u_date = #{uDate}
+			where board_id = #{boardId}
+		]]>
+	</update>
+	
+	<update id="updateBestCommentLikeCntPlus">
+		<![CDATA[
+			update tb2_board set best_comment_like_cnt = best_comment_like_cnt + 1
+			where board_id = #{boardId}
+		]]>
+	</update>
+	
+	<update id="updateBestCommentLikeCntMinus">
+		<![CDATA[
+			update tb2_board set best_comment_like_cnt = best_comment_like_cnt - 1
+			where board_id = #{boardId}
+		]]>
+	</update>
+</mapper>

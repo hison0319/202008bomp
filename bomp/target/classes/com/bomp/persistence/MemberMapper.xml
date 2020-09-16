@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.MemberMapper">
+	<select id="getList" resultType="Member">
+		<![CDATA[
+			SELECT * FROM tb1_member where member_id > 0	
+		]]>
+	</select>
+	
+	<select id="read" resultType="Member">
+		select * from tb1_member where member_id = #{memberId}
+	</select>
+	
+	<select id="readWithKakao" resultType="Member">
+		select * from tb1_member where member_kakao = #{memberKakao}
+	</select>
+	
+	<select id="checkMemberNick" resultType="int">
+		<![CDATA[
+			SELECT count(member_id) FROM tb1_member where member_nick = #{memberNick}
+		]]>
+	</select>
+	
+	<insert id="insert">
+		insert into tb1_member (member_kakao, member_nick)
+		values (#{memberKakao}, #{memberNick})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="memberId">
+		insert into tb1_member (member_kakao, member_nick)
+		values (#{memberKakao}, #{memberNick})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb1_member where member_id = #{memberId}
+	</delete>
+	
+	<update id="update">
+		update tb1_member set member_kakao=#{memberKakao}, member_nick=#{memberNick} 
+		where member_id=#{memberId}
+	</update>
+	
+	<update id="updateMemberNick">
+		update tb1_member set member_nick=#{memberNick} where member_id=#{memberId}
+	</update>
+	
+	<update id="updateAlertPlus">
+		update tb1_member set alert= alert + 1 where member_id=#{memberId}
+	</update>
+	
+	<update id="updateAlertMinus">
+		update tb1_member set alert= alert - 1 where member_id=#{memberId}
+	</update>
+</mapper>

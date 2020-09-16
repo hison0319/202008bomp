@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bomp.persistence.BoardMarkMapper">
+	<select id="getList" resultType="BoardMark">
+		<![CDATA[
+			SELECT * FROM tb12_board_mark where board_mark_id > 0	
+		]]>
+	</select>
+	
+	<select id="read" resultType="BoardMark">
+		select * from tb12_board_mark where board_mark_id = #{boardMarkId}
+	</select>
+	
+	<select id="readMemberIdANDBoardId" resultType="BoardMark">
+		select * from tb12_board_mark where member_id=#{memberId} AND board_id = #{boardId}
+	</select>
+	
+	<select id="getCountBoardIdWithMemberId" resultType="int">
+		select count(board_mark_id) from tb12_board_mark 
+		where member_id = #{memberId} AND board_id = #{boardId}
+	</select>
+	
+	<insert id="insert">
+		insert into tb12_board_mark (board_id, member_id)
+		values (#{boardId}, #{memberId})
+	</insert>
+	
+	<insert id="insertSelectKey" keyProperty="memberId">
+		insert into tb12_board_mark (board_id, member_id)
+		values (#{boardId}, #{memberId})
+	</insert>
+	
+	<delete id="delete">
+		delete from tb12_board_mark where board_mark_id = #{boardMarkId}
+	</delete>
+	
+	<update id="update">
+		update tb12_board_mark set board_id=#{boardId}, member_id=#{memberId} 
+		where board_mark_id=#{boardMarkId}
+	</update>
+</mapper>
